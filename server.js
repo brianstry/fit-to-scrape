@@ -16,7 +16,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost/fit-to-scrape");
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/fit-to-scrape";
+
+// Set mongoose to leverage built in JavaScript ES6 Promises
+
+// Connect to the Mongo DB
+
+mongoose.Promise = Promise;
+
+mongoose.connect(MONGODB_URI, {
+
+  useMongoClient: true
+
+});
+
+
+// mongoose.connect("mongodb://localhost/fit-to-scrape");
 
 app.get("/scrape", function(req, res) {
   axios.get("https://www.imdb.com/").then(function(response) {
